@@ -1,0 +1,119 @@
+<html>
+<head>
+    <title>Recipe Request</title>
+
+</head>
+<body style="padding:25px">
+<h1>Speech API for recipes</h1>
+<p>Made by: Sanne Weering (S4127579)</p>
+<p>
+    Click on the button to start the recording. If you say: "lasagne", "noodles", "curry" or "pasta" a recipe will be shown.
+</p>
+<button id="start_button" onclick="toggleStartStop()">Start recording</button>
+<br/><br/>
+
+<label>Pitch:</label>
+<select name="pitch" id="pitch">
+    <option>Low</option>
+    <option>Normal</option>
+    <option>High</option>
+</select>
+
+<br/><br/>Recording transcript:
+<br/><label id="feedback_interim" name="feedback_interim">No results available yet</label>
+<br/>
+
+<img id="picture" style="width:250px;height:250px;display:none;">
+<h1 id="test"></h1>
+<h1 id="recipe"></h1>
+<p id="ingredients"></p>
+<p id="method"></p>
+</body>
+</html>
+
+<script>
+    var recognition = new webkitSpeechRecognition();
+    var recognizing = false;
+    recognition.lang = 'en-EN';
+    recognition.continuous = true;
+    recognition.iterim = true;
+    recognition.maxAlternatives = 5;
+
+    recognition.onresult = function(event) {
+        var final = "";
+        var interim = "";
+        for (var i = 0; i < event.results.length; ++i) {
+            interim = event.results[i][0].transcript;
+        }
+
+        feedback_interim.innerHTML = interim;
+            if (feedback_interim.innerHTML.includes("lasagna")){
+                document.getElementById("picture").style.display = "block";
+                document.getElementById("picture").src = "pictures/lasagne.jpg";
+                document.getElementById("recipe").innerText = "Recipe Lasagne";
+                document.getElementById("ingredients").innerText = "2 tbsp olive oil, plus a little for the dish\n 750g lean beef mince\n 90g pack prosciutto\n half quantity of our tomato sauce\n 200ml hot beef stock\n a little grated nutmeg\n 300g pack fresh lasagne sheets\n half quantity of our white sauce\n 125g ball mozzarella, torn into thin strips";
+                document.getElementById("method").innerText = "STEP 1: To make the meat sauce, heat 2 tbsp olive oil in a frying pan and cook 750g lean beef mince in two batches for about 10 mins until browned all over.\n STEP 2: Finely chop 4 slices of prosciutto from a 90g pack, then stir through the meat mixture.\n STEP 3: Pour over 800g passata or half our basic tomato sauce recipe and 200ml hot beef stock. Add a little grated nutmeg, then season.\n STEP 4: Bring up to the boil, then simmer for 30 mins until the sauce looks rich.\n STEP 5: Heat oven to 180C/fan/160C/gas 4 and lightly oil an ovenproof dish (about 30 x 20cm).\n STEP 6: Spoon one third of the meat sauce into the dish, then cover with some fresh lasagne sheets from a 300g pack. Drizzle over roughly 130g ready-made or homemade white sauce.\n STEP 7: Repeat until you have 3 layers of pasta. Cover with the remaining 390g white sauce, making sure you can’t see any pasta poking through.\n STEP 8: Scatter 125g torn mozzarella over the top.\n STEP 9: Arrange the rest of the prosciutto on top. Bake for 45 mins until the top is bubbling and lightly browned.";
+                stop_recognition(interim);}
+            if (feedback_interim.innerHTML.includes("curry")){
+                document.getElementById("picture").style.display = "block";
+                document.getElementById("picture").src = "pictures/curry.jpg";
+                document.getElementById("recipe").innerText = "Recipe Curry";
+                document.getElementById("ingredients").innerText = "4 skinless chicken breasts, cut into chunks (or use thighs or drumsticks)\n 2 tsp cornflour\n 1 onion, diced\n 2 tbsp rapeseed oil\n 1 garlic clove, crushed\n 2 tsp curry powder\n 1 tsp turmeric\n ½ tsp ground ginger\n pinch sugar\n 400ml chicken stock\n 1 tsp soy sauce\n handful frozen peas\n rice to serve";
+                document.getElementById("method").innerText = "STEP 1: Toss the chicken pieces in the cornflour and season well. Set them aside.\n STEP 2: Fry the onion in half of the oil in a wok on a low to medium heat, until it softens – about 5-6 minutes – then add the garlic and cook for a minute. Stir in the spices and sugar and cook for another minute, then add the stock and soy sauce, bring to a simmer and cook for 20 minutes. Tip everything into a blender and blitz until smooth.\n STEP 3: Wipe out the pan and fry the chicken in the remaining oil until it is browned all over. Tip the sauce back into the pan and bring everything to a simmer, stir in the peas and cook for 5 minutes. Add a little water if you need to thin the sauce. Serve with rice.";
+                stop_recognition(interim);}
+            if (feedback_interim.innerHTML.includes("noodles")){
+                document.getElementById("picture").style.display = "block";
+                document.getElementById("picture").src = "pictures/noodles.jpg";
+                document.getElementById("recipe").innerText = "Recipe Noodles";
+                document.getElementById("ingredients").innerText = "3 tbsp sesame oil\n 350g lean pork mince\n 350g egg noodles\n thumb-sized piece ginger, peeled and chopped, or 1½ tbsp ginger purée\n 3 garlic cloves, crushed, or 1 tbsp garlic purée\n 320g stir-fry veg (we used 2 x 160g bags of mangetout, baby sweetcorn, beansprouts, carrots and peppers)\n 4 tbsp low-salt soy sauce\n 2 tsp cornflour\n 4 tbsp sweet chilli sauce";
+                document.getElementById("method").innerText = "STEP 1: Heat the oil in a wok or fryin gpan. Add the mince, break it up with a spoon and fry over a high heat for about 8 mins until browning. While the meat cooks, boil a kettle, then pour the hot water over the noodles. Set aside for 5-10 mins to soften.\n STEP 2: Add the ginger, garlic and veg to the pan and stir-fry for 2-3 mins. Mix 1 tbsp soy sauce with the cornflour to make a paste. Add the remaining soy sauce, the chilli sauce and 2 tbsp water. Drain the noodles and add to the pan with the sauce. Cook until the sauce coats the noodles, adding a splash of water if needed, then serve.";
+                stop_recognition(interim);}
+            if (feedback_interim.innerHTML.includes("pasta")){
+                document.getElementById("picture").style.display = "block";
+                document.getElementById("picture").src = "pictures/pasta.jpg";
+                document.getElementById("recipe").innerText = "Recipe Pasta";
+                document.getElementById("ingredients").innerText = "1 tbsp cold-pressed rapeseed oil1 large onion , finely chopped (160g)\n 2 large garlic cloves , finely grated\n 1 tsp chilli flakes\n 1 tsp smoked paprika\n 400g can chopped tomatoes\n 1 tsp vegetable bouillon powder\n 1 aubergine , chopped\n 150g wholemeal penne or fusilli\n large handful of basil , plus extra to serve\n 25g parmesan or vegetarian Italian-style hard cheese, finely grated";
+                document.getElementById("method").innerText = "STEP 1: Heat the oil in a large non-stick pan, add the onions, cover and cook for 5 mins. Remove the lid and cook for 5 mins more, stirring frequently until softened. Add the garlic, chilli flakes and paprika, stir briefly, then tip in the tomatoes and a can of water. Stir in the bouillon and aubergine, then bring to a simmer, cover and cook for 20 mins.\n STEP 2: Cook the penne in a pan of boiling water for 12 mins until al dente. Drain, reserving 60ml of the cooking water. Add the cooked penne to the sauce, and toss well with the basil and a little of the reserved water, if needed. Spoon into two shallow bowls, and serve topped with the cheese and some extra basil, if you like.";
+                stop_recognition(interim);}
+    }
+
+    function stop_recognition(interim){
+        document.getElementById("start_button").innerText = "Start recording";
+        document.getElementById("feedback_interim").innerHTML = interim;
+        start_talking();
+        recognition.stop();
+        recognizing = false;
+    }
+
+    function toggleStartStop() {
+        document.getElementById("start_button").innerText = "Listening";
+        document.getElementById("picture").src = "";
+        feedback_interim.innerHTML = "";
+        recognition.start();
+        recognizing = true;
+    }
+
+    var utt = new SpeechSynthesisUtterance();
+
+    function start_talking() {
+        utt.pitch = select_pitch();
+        utt.text = encode_utf8(document.getElementById("feedback_interim").innerHTML);
+        window.speechSynthesis.speak(utt);
+    }
+
+    function encode_utf8(s) {
+        return unescape(encodeURIComponent(s));
+    }
+
+    function select_pitch() {
+        var pitch_selection = document.getElementById("pitch");
+        var pitch = pitch_selection.options[pitch_selection.selectedIndex];
+        if (pitch.text == "Low"){
+            return 0.5
+        } else if (pitch.text == "Normal"){
+            return 1
+        } else if (pitch.text == "High"){
+            return 1.5
+        }
+    }
+</script>
